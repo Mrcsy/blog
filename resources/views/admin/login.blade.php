@@ -29,7 +29,7 @@
         <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
         <hr class="hr15">
         <input name="code" style="height:40px;width: 150px;float: left" lay-verify="required" placeholder="验证码"  type="password" class="layui-input">
-        <img src="{{url('admin/code')}}" alt="" style="float: right" onclick="this.src='{{url('admin/code')}}?'-Math.random()">
+        <img src="{{url('admin/code')}}" alt="" style="float: right" onclick="this.src='{{url('admin/code')}}?'+Math.random()">
         <hr class="hr15">
         <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
         <hr class="hr20" >
