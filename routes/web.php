@@ -19,3 +19,5 @@ Route::get('/', function () {
 Route::get('admin/login','Admin\LoginController@login');
 //验证码路由
 Route::get('admin/code','Admin\LoginController@code');
+//验证规则
+Route::any('admin/dologin','Admin\LoginController@dologin');
