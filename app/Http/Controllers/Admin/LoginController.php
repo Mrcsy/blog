@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Org\code\Code;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
@@ -14,6 +17,12 @@ class LoginController extends Controller
     {
         return view('admin.login');
     }
+
+    //后台首页
+//    public function index()
+//    {
+//        return view('admin.index');
+//    }
     //验证码
     public function code()
     {
@@ -49,11 +58,72 @@ class LoginController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-
         //3.验证是否由此用户（用户名  密码  验证码）
 
+        //验证验证码-验证码生成会放导session里面
+        if(strtolower($input['code']) != strtolower(session()->get('code'))){
+            return redirect('admin/login')->with('errors','验证码错误');
+        }
+        $user = User::where('user_name',$input['username'])->first();
+        if(!$user){
+            return redirect('admin/login')->with('errors','用户错误');
+        }
+        if($input['password'] != Crypt::decrypt($user->user_pass)){
+            return redirect('admin/login')->with('errors','密码错误');
+        }
 
-        //4.
+        //4.保存用户信息到seesion中
+        session()->put('user',$user);
+
+        //5.跳转到后台首页
+        return  redirect('admin/index');
+
 
     }
+
+
+    //加密算法
+    public function jiami()
+    {
+        //1.md5加密，生成一个32位的字符串
+//        $str = "123456";
+//        return md5($str);
+
+        //2.哈希加密
+//        $str = '123456';
+//        $hash = Hash::make($str);
+//        //解密
+//        if(Hash::check($str,$hash)){
+//            return '密码正确';
+//        }else{
+//            return '密码错误';
+//        }
+
+        //3.crypt加密
+        $str = '123456';
+        $crypt_str = 'eyJpdiI6IkQyd2UrSklibFZpMmJ6RHlyRldtRnc9PSIsInZhbHVlIjoiMzdYeEppU1RlU1dvXC96MXkxR3RYT0E9PSIsIm1hYyI6IjYxMDdiODRkMTE4YzYzZjk1YWE1Y2VhN2VhYjE3NGYxODM5ZjNhYjYzZTcwZDVmODliMTRkOTEzZDM3NDk4YTEifQ';
+//        $crypt_str = Crypt::encrypt($str);
+//        return $crypt_str;
+        //解密
+       if(Crypt::decrypt($crypt_str) == $str) {
+           return '密码正确';
+       }
+
+
+
+    }
+
+    //后台首页
+    public function index()
+    {
+        return view('admin.index');
+    }
+
+    //后台欢迎页
+    public function welcome()
+    {
+        return view('admin.welcome');
+    }
+
+
 }

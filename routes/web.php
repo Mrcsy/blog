@@ -19,5 +19,11 @@ Route::get('/', function () {
 Route::get('admin/login','Admin\LoginController@login');
 //验证码路由
 Route::get('admin/code','Admin\LoginController@code');
-//验证规则
+//处理后台登录的路由
 Route::any('admin/dologin','Admin\LoginController@dologin');
+//登录首页路由
+Route::any('admin/index','Admin\LoginController@index');
+//加密算法
+Route::any('admin/jiami','Admin\LoginController@jiami');
+//后台欢迎页
+Route::any('admin/welcome','Admin\LoginController@welcome');
