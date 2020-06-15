@@ -17,12 +17,6 @@ class LoginController extends Controller
     {
         return view('admin.login');
     }
-
-    //后台首页
-//    public function index()
-//    {
-//        return view('admin.index');
-//    }
     //验证码
     public function code()
     {
@@ -123,6 +117,15 @@ class LoginController extends Controller
     public function welcome()
     {
         return view('admin.welcome');
+    }
+
+    //退出登录
+    public function logout()
+    {
+        //清空session中的信息
+        session()->flush();
+        //跳转到登录页面
+        return redirect('admin/login');
     }
 
 
