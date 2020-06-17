@@ -94,7 +94,7 @@ class UserController extends Controller
     public function edit($id)
     {
         //
-        $user =User::find();
+        $user =User::find($id);
         return view('admin.user.edit',compact('user'));
     }
 
@@ -138,5 +138,42 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        $user = User::find($id);
+        $res = $user->delete();
+        if($res){
+            $data = [
+                'status'=>1,
+                'message'=>'修改成功',
+            ];
+        }else{
+            $data = [
+                'status'=>0,
+                'message'=>'修改失败',
+            ];
+        }
+        return $data;
     }
+
+    public function delAll(Request $request)
+    {
+        $input = $request->input('ids');
+
+        $res = User::destroy($input);
+        if($res){
+            $data = [
+                'status'=>1,
+                'message'=>'删除成功',
+            ];
+        }else{
+            $data = [
+                'status'=>0,
+                'message'=>'删除失败',
+            ];
+        }
+        return $data;
+    }
+
+
+
+
 }

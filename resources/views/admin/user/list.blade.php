@@ -81,7 +81,7 @@
                         @foreach($user as $v)
                         <tr>
                             <td>
-                                <input type="checkbox" name="id" value="1"   lay-skin="primary">
+                                <input type="checkbox" name="id" value="{{ $v->user_id }}" class="ids"   lay-skin="primary">
                             </td>
                             <td>{{ $v->user_id }}</td>
                             <td>{{ $v->user_name }}</td>
@@ -98,7 +98,7 @@
                                 <a onclick="xadmin.open('修改密码','member-password.html',600,400)" title="修改密码" href="javascript:;">
                                     <i class="layui-icon">&#xe631;</i>
                                 </a>
-                                <a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+                                <a title="删除" onclick="member_del(this,{{ $v->user_id }})" href="javascript:;">
                                     <i class="layui-icon">&#xe640;</i>
                                 </a>
                             </td>
@@ -182,16 +182,30 @@
     /*用户-删除*/
     function member_del(obj,id){
         layer.confirm('确认要删除吗？',function(index){
+            $.post('/admin/user/'+id,{"_method":"DELETE","_token":"{{ csrf_token() }}"},function (data) {
+                if(data.status == 1){
+                    $(obj).parents("tr").remove();
+                    layer.msg(data.message,{icon:6,time:1000});
+                }else{
+                    layer.msg(data.message,{icon:5,time:1000})
+                }
+            })
             //发异步删除数据
-            $(obj).parents("tr").remove();
-            layer.msg('已删除!',{icon:1,time:1000});
+            // $(obj).parents("tr").remove();
+            // layer.msg('已删除!',{icon:1,time:1000});
         });
     }
 
 
 
     function delAll (argument) {
+        //获取到要批量删除的方法
         var ids = [];
+        // $(".layui-form-checked").each(function (i,v) {
+        //     var u = $(v).attr('data-ids');
+        //     ids.push(u);
+        // });
+        // alert(ids);
 
         // 获取选中的id
         $('tbody input').each(function(index, el) {
@@ -200,7 +214,18 @@
             }
         });
 
-        layer.confirm('确认要删除吗？'+ids.toString(),function(index){
+        layer.confirm('确认要删除吗？',function(index){
+
+            $.get('/admin/user/del',{ 'ids':ids},function (data) {
+                if(data.status == 1){
+                    $(obj).parents("tr").remove();
+                    layer.msg(data.message,{icon:6,time:1000});
+                }else{
+                    layer.msg(data.message,{icon:5,time:1000})
+                }
+            })
+
+
             //捉到所有被选中的，发异步进行删除
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();

@@ -36,6 +36,8 @@ Route::group(['prefix'=>'admin','namespace'=>'Admin','middleware'=>'isLogin'],fu
     //后台退出登录路由
     Route::any('logout','LoginController@logout');
 
+    //多选删除
+    Route::get('user/del','UserController@delAll');
     //后台用户模块相关路由
     Route::resource('user','UserController');
     //添加用户模块
