@@ -55,8 +55,7 @@
         </form>
     </div>
 </div>
-<script>layui.use(['form', 'layer','jquery'],
-        function() {
+<script>layui.use(['form', 'layer','jquery'], function() {
             $ = layui.jquery;
             var form = layui.form,
                 layer = layui.layer;

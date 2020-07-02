@@ -128,5 +128,11 @@ class LoginController extends Controller
         return redirect('admin/login');
     }
 
+    //没有权限，对应的跳转
+    public function noaccess()
+    {
+        return view('errors.noaccess');
+    }
+
 
 }
