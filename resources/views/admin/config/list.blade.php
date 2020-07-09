@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  
+
   <head>
     <meta charset="UTF-8">
     <title>欢迎页面-X-admin2.0</title>
@@ -11,7 +11,7 @@
     @include('admin.public.styles')
     @include('admin.public.script')
   </head>
-  
+
   <body>
     <div class="x-nav">
       <span class="layui-breadcrumb">
@@ -48,6 +48,7 @@
           <tr>
 
             <input type="hidden" value="{{ $v->conf_id }}" name="conf_id[]">
+            <input type="hidden" value="{{ $v->conf_content }}" name="conf_contentss[]">
             <td>{{ $v->conf_id }}</td>
             <td>{{ $v->conf_title }}</td>
             <td>{{ $v->conf_name }}</td>
@@ -81,7 +82,7 @@
       layui.use(['form','layer','laydate'], function(){
         var laydate = layui.laydate;
           var form = layui.form;
-        
+
         //执行一个laydate实例
         laydate.render({
           elem: '#start' //指定元素

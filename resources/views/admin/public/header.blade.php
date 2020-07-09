@@ -1,7 +1,7 @@
 <!-- 顶部开始 -->
 <div class="container">
     <div class="logo">
-        <a href="index.blade.php">X-admin v2.2</a></div>
+        <a href="#">{{ config('webconfig.web_title') }}</a></div>
     <div class="left_open">
         <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
     </div>

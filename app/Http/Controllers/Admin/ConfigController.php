@@ -23,8 +23,8 @@ class ConfigController extends Controller
 
         file_put_contents(config_path().'/webconfig.php',$str);
     }
-    
-    
+
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +34,7 @@ class ConfigController extends Controller
     {
        $conf =  Config::get();
        //格式化返回的数据
-        foreach ($conf as $v){
+        foreach ($conf as $k => $v){
             switch($v->field_type){
                 //1. 文本框 input
 //                aaaa =>   <input value="aaa" type="text" name="title"  class="layui-input">
@@ -66,23 +66,22 @@ class ConfigController extends Controller
 
                     foreach ($arr as $n){
                         $a = explode('|',$n);
-
                         if($a[0] == $v->conf_content){
                             $str.= '<input type="radio" checked name="conf_content[]" value="'.$a[0].'" title="'.$a[1].'">'.$a[1].'&nbsp;&nbsp;&nbsp;';
                         }else{
-                            $str.= '<input type="radio"  name="conf_content[]" value="'.$a[0].'" title="'.$a[1].'">'.$a[1].'&nbsp;&nbsp;&nbsp;';
+                            $str.= '<input type="radio" name="conf_content[]" value="'.$a[0].'" title="'.$a[1].'">'.$a[1].'&nbsp;&nbsp;&nbsp;';
                         }
 
                     }
-
                     $v->conf_contents = $str;
-
 
                     break;
 
 
             }
         }
+
+
 
        return view('admin.config.list',compact('conf'));
     }
@@ -108,6 +107,11 @@ class ConfigController extends Controller
     {
         // //接收传过来的参数
         $input = $request->except('_token');
+//        $input = $request->all();
+//        if($input['field_type'] == 'radio'){
+//            $input['field_value'] = '1|开启,0|关闭';
+//        }
+//        unset($input[]['conf_content']);
 
         $res = Config::create($input);
 
@@ -178,13 +182,12 @@ class ConfigController extends Controller
 
         return $data;
     }
-    
-    
+
+
     //批量修改网站配置项的方法
     public function changeContent(Request $request)
     {
         $input = $request->except('_token');
-//        dd($input);
 
         DB::beginTransaction();
 
